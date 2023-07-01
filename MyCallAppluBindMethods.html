@@ -1,0 +1,105 @@
+<script>
+  console.log(this);
+  console.log(globalThis);
+  class Car {
+    constructor(name) {
+      this.name = name;
+    }
+  }
+
+  class Lorry {
+    constructor(power) {
+      this.power = power;
+    }
+  }
+
+  class Toyota extends Car {
+    constructor(year) {
+      super(name);
+      this.year = year;
+    }
+  }
+
+  const newCar = new Car('VAZ');
+
+  const newToyota = new Toyota('Mazda', 1975);
+
+  const newLorry = new Lorry('178 hp');
+
+  const myName = {
+    firstName: 'Denis',
+    lastName: 'Ulesov',
+  };
+
+  Function.prototype.myApply = function (context, args) {
+    let currentContext = context || globalThis;
+    console.log('globalThis: ', globalThis);
+    let uniqueProp = Math.random();
+    while (currentContext[uniqueProp] !== undefined) {
+      uniqueProp = Math.random();
+    }
+    currentContext[uniqueProp] = this;
+
+    let result = currentContext[uniqueProp](...args);
+    console.log('result: ', result);
+
+    delete currentContext[uniqueProp];
+
+    console.log('result: ', result);
+    return result;
+  };
+
+  function printName(city, country) {
+    console.log(`${this.firstName} ${this.lastName}, ${city} - ${country}`);
+  }
+
+  printName.myApply(myName, ['Palia', 'India']);
+
+  Function.prototype.myCall = function (context, ...args) {
+    let currentContext = context || globalThis;
+    let randomProp = Math.random();
+    while (currentContext[randomProp] !== undefined) {
+      randomProp = Math.random();
+    }
+    currentContext[randomProp] = this;
+    let result = currentContext[randomProp](...args);
+    delete currentContext[randomProp];
+    return result;
+  };
+
+  printName.myCall(myName, 'Palia1', 'India1');
+
+  Function.prototype.myBind = function (context, ...args) {
+    const callback = this;
+    return function (...a) {
+      callback.call(context, ...[...args, ...a]);
+    };
+  };
+
+  const result2 = printName.myBind(myName, 'Palia2');
+
+  result2('India2');
+
+  Function.prototype.myNewBind = function (context, ...args) {
+    const callback = this;
+    return function (...a) {
+      let currentContext = context || globalThis;
+      let randomProp = Math.random();
+      while (currentContext[randomProp] !== undefined) {
+        randomProp = Math.random();
+      }
+      currentContext[randomProp] = callback;
+      let result = currentContext[randomProp](...args, ...a);
+
+      delete currentContext[randomProp];
+      return result;
+    };
+  };
+
+  const result3 = printName.myNewBind(myName, 'St.Peterburg');
+  console.log('result3: ', result3);
+  result3();
+  result3('Russia');
+
+  debugger;
+</script>
