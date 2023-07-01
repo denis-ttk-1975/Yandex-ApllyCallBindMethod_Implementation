@@ -53,7 +53,7 @@
     console.log(`${this.firstName} ${this.lastName}, ${city} - ${country}`);
   }
 
-  printName.myApply(myName, ['Palia', 'India']);
+  printName.myApply(myName, ['St.Peterburg0', 'Russia0']);
 
   Function.prototype.myCall = function (context, ...args) {
     let currentContext = context || globalThis;
@@ -67,7 +67,7 @@
     return result;
   };
 
-  printName.myCall(myName, 'Palia1', 'India1');
+  printName.myCall(myName, 'St.Peterburg1', 'Russia1');
 
   Function.prototype.myBind = function (context, ...args) {
     const callback = this;
@@ -76,9 +76,9 @@
     };
   };
 
-  const result2 = printName.myBind(myName, 'Palia2');
+  const result2 = printName.myBind(myName, 'St.Peterburg2');
 
-  result2('India2');
+  result2('Russia2');
 
   Function.prototype.myNewBind = function (context, ...args) {
     const callback = this;
